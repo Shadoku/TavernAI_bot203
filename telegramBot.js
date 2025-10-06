@@ -1,9 +1,46 @@
 'use strict';
 
+const fs = require('fs');
 const TelegramBot = require('node-telegram-bot-api');
 const needle = require('needle');
 const path = require('path');
 const config = require(path.join(process.cwd(), './config.conf'));
+
+const DEFAULT_ENV_FILE = path.join(process.cwd(), '.telegram.env');
+const customEnvFile = process.env.TELEGRAM_ENV_FILE;
+const envFilePath = customEnvFile ? path.resolve(customEnvFile) : DEFAULT_ENV_FILE;
+
+function loadEnvironmentFromFile(filePath) {
+    if (!filePath) {
+        return;
+    }
+
+    if (!fs.existsSync(filePath)) {
+        return;
+    }
+
+    const content = fs.readFileSync(filePath, 'utf8');
+    for (const line of content.split(/\r?\n/)) {
+        const trimmed = line.trim();
+        if (!trimmed || trimmed.startsWith('#')) {
+            continue;
+        }
+
+        const separatorIndex = trimmed.indexOf('=');
+        if (separatorIndex === -1) {
+            continue;
+        }
+
+        const key = trimmed.slice(0, separatorIndex).trim();
+        const value = trimmed.slice(separatorIndex + 1).trim();
+
+        if (key && !Object.prototype.hasOwnProperty.call(process.env, key)) {
+            process.env[key] = value;
+        }
+    }
+}
+
+loadEnvironmentFromFile(envFilePath);
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 if (!TELEGRAM_TOKEN) {

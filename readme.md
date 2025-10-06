@@ -63,12 +63,15 @@ If the message is not finished, you can simply send the request again, or say "c
 TavernAI now ships with an optional Telegram wrapper that allows you to chat with your characters directly from Telegram.
 
 1. Install the dependencies with `npm install` (if you have not already done so).
-2. Set the following environment variables:
-   * `TELEGRAM_BOT_TOKEN` – required. The token for the bot you created with [@BotFather](https://t.me/BotFather).
-   * `TAVERNAI_BASE_URL` – optional. Overrides the TavernAI server URL if it is not running on `http://127.0.0.1:<port from config.conf>`.
-   * `TAVERNAI_MAX_CONTEXT`, `TAVERNAI_MAX_LENGTH`, `TAVERNAI_REQUEST_TIMEOUT` – optional overrides for generation parameters.
-   * `TELEGRAM_HISTORY_LIMIT` – optional. Controls how many recent turns are kept when building prompts (default: 20 messages).
-   * `TELEGRAM_USER_NAME` and `TAVERNAI_CHARACTER_NAME` – optional labels used when the wrapper builds prompts for TavernAI.
+2. Set the following environment variables (you can either export them in your shell or define them in a `.telegram.env` file located next to `telegramBot.js`):
+    * `TELEGRAM_BOT_TOKEN` – required. The token for the bot you created with [@BotFather](https://t.me/BotFather).
+    * `TAVERNAI_BASE_URL` – optional. Overrides the TavernAI server URL if it is not running on `http://127.0.0.1:<port from config.conf>`.
+    * `TAVERNAI_MAX_CONTEXT`, `TAVERNAI_MAX_LENGTH`, `TAVERNAI_REQUEST_TIMEOUT` – optional overrides for generation parameters.
+    * `TELEGRAM_HISTORY_LIMIT` – optional. Controls how many recent turns are kept when building prompts (default: 20 messages).
+    * `TELEGRAM_USER_NAME` and `TAVERNAI_CHARACTER_NAME` – optional labels used when the wrapper builds prompts for TavernAI.
+    * `TELEGRAM_ENV_FILE` – optional. Set this to the path of a different env file if you do not want to use `.telegram.env`.
+
+   The env file uses `KEY=VALUE` pairs (for example: `TELEGRAM_BOT_TOKEN=123456789:ABCDEF`). Lines starting with `#` are treated as comments.
 3. Start TavernAI as usual (`node server.js`).
 4. In a separate terminal run `node telegramBot.js` to start the Telegram bot.
 
